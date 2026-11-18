@@ -1,13 +1,3 @@
-// Horta das Flores - Grupo 07
-// Sensor ultrassônico HC-SR04: mede a distância em cm e publica via MQTT (TLS).
-// Volume, nível e percentual são calculados no app.
-//
-// Biblioteca: PubSubClient (Nick O'Leary), pelo Gerenciador de Bibliotecas.
-// Ligações: VCC->VIN (5 V), GND->GND, TRIG->GPIO 26,
-//           ECHO->1 kΩ->GPIO 25, e 2 kΩ do GPIO 25 para o GND.
-//
-// Credenciais ficam em secrets.h (copie de secrets.h.example).
-
 #include <WiFi.h>
 #include <WiFiClientSecure.h>
 #include <PubSubClient.h>
@@ -57,7 +47,7 @@ float lerDistanciaCm() {
     digitalWrite(PINO_TRIG, LOW);
     unsigned long duracao = pulseIn(PINO_ECHO, HIGH, 30000);
     if (duracao > 0) {
-      soma += duracao * 0.0343 / 2.0;  // 0,0343 cm/µs, dividido por 2 (ida e volta)
+      soma += duracao * 0.0343 / 2.0; 
       validas++;
     }
     delay(60);
@@ -82,7 +72,6 @@ void conectarMQTT() {
     if (client.connect(MQTT_CLIENT_ID, MQTT_USUARIO, MQTT_SENHA)) {
       Serial.println("conectado");
     } else {
-      // rc 4: usuário/senha errados, 5: sem permissão, -2: rede ou certificado
       Serial.print("falhou, rc=");
       Serial.println(client.state());
       delay(5000);
